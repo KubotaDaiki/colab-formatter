@@ -48,7 +48,7 @@ async function readCode(tabId: number) {
       return code;
     },
   });
-  return code[0].result;
+  return code[0].result!;
 }
 
 async function formatCode(code: string) {
