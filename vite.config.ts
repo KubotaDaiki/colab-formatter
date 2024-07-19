@@ -17,7 +17,7 @@ const manifest = defineManifest({
     "128": "icon128.png",
   },
   background: {
-    service_worker: "src/background.tsx",
+    service_worker: "src/background.ts",
   },
   commands: {
     format: {
@@ -43,7 +43,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        offscreen: "src/offscreen.tsx"
+        offscreen: "src/offscreen.ts"
       },
       output: {
         entryFileNames: `assets/[name].js`, // offscreenのbuild時のファイル名を固定
