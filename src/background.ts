@@ -25,6 +25,11 @@ chrome.commands.onCommand.addListener((commands, tab) => {
   }
 });
 
+/**
+ * フォーカス中のセルのコードを読み取る
+ * @param tabId 読み取り先のタブID
+ * @returns 読み取ったコード
+ */
 async function readCode(tabId: number) {
   const code = await chrome.scripting.executeScript({
     target: { tabId: tabId },
@@ -51,6 +56,11 @@ async function readCode(tabId: number) {
   return code[0].result!;
 }
 
+/**
+ * コードをフォーマットする
+ * @param code フォーマットするコード
+ * @returns フォーマット後のコード
+ */
 async function formatCode(code: string) {
   const response = await chrome.runtime.sendMessage({ code: code }); // offscreenにコードを送り、フォーマットする
   if (response.status === "error") {
@@ -64,6 +74,11 @@ async function formatCode(code: string) {
   return response.code;
 }
 
+/**
+ * フォーカス中のセルにコードを書き込む
+ * @param tabId 書き込み先のタブID
+ * @param code 書き込むコード
+ */
 async function writeCode(tabId: number, code: string) {
   await chrome.scripting.executeScript({
     target: { tabId: tabId },
