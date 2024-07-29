@@ -1,10 +1,3 @@
-// コードフォーマット用のoffscreenを作成
-chrome.offscreen.createDocument({
-  url: "offscreen.html",
-  reasons: [chrome.offscreen.Reason.IFRAME_SCRIPTING],
-  justification: "reason for needing the document",
-});
-
 // ショートカットキー入力時に以下の関数が実行される
 chrome.commands.onCommand.addListener((commands, tab) => {
   if (commands === "format") {
@@ -16,6 +9,9 @@ chrome.commands.onCommand.addListener((commands, tab) => {
         return;
       }
       const tabId = tab.id!
+
+      // コードフォーマット用のoffscreenをセットアップ
+      await setupOffscreenDocument("offscreen.html")
 
       // コードをフォーマットしてセルに書き込む
       const code = await readCode(tabId)
@@ -77,4 +73,35 @@ async function writeCode(tabId: number, code: string) {
     },
     args: [code]
   });
+}
+
+
+let creating: any;
+/**
+ * 既存のオフスクリーンを検索し、存在しない場合は新規作成する
+ * @param path オフスクリーンのパス
+ * @returns
+ */
+async function setupOffscreenDocument(path: string) {
+  const offscreenUrl = chrome.runtime.getURL(path);
+  const existingContexts = await chrome.runtime.getContexts({
+    contextTypes: [chrome.runtime.ContextType.OFFSCREEN_DOCUMENT],
+    documentUrls: [offscreenUrl]
+  });
+
+  if (existingContexts.length > 0) {
+    return;
+  }
+
+  if (creating) {
+    await creating;
+  } else {
+    creating = chrome.offscreen.createDocument({
+      url: path,
+      reasons: [chrome.offscreen.Reason.IFRAME_SCRIPTING],
+      justification: 'reason for needing the document',
+    });
+    await creating;
+    creating = null;
+  }
 }

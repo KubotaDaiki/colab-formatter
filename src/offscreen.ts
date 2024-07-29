@@ -47,15 +47,19 @@ class Pyodide {
   }
 }
 
-// フォーマット毎にpyodideを初期化するとレスポンスが非常に悪くなるため、
-// グローバル変数として定義・初期化をしている
-const pyodideClass = new Pyodide();
-pyodideClass.init();
+let pyodideClass: Pyodide | undefined;
 
 // backgroundからメッセージが送られてくると、以下の関数が実行されフォーマットされる
 chrome.runtime.onMessage.addListener((request, _sender, callback) => {
   (async () => {
     try {
+      if (!pyodideClass) {
+        // フォーマット毎にpyodideを初期化するとレスポンスが非常に悪くなるため、
+        // 最初だけ定義・初期化をしている
+        pyodideClass = new Pyodide();
+        await pyodideClass.init();
+      }
+
       const formattedCode = await pyodideClass.formatCode(request.code)
       callback({ status: "success", code: formattedCode });
     } catch (e: any) {
