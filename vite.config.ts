@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 
 const manifest = defineManifest({
   name: "colab-formatter",
-  version: "1.1.0",
+  version: "1.1.1",
   manifest_version: 3,
   description: "google colab上のコードをフォーマットする",
   permissions: ["scripting", "offscreen", "notifications"],
