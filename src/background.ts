@@ -11,7 +11,7 @@ chrome.commands.onCommand.addListener((commands, tab) => {
       const tabId = tab.id!
 
       // コードフォーマット用のoffscreenをセットアップ
-      await setupOffscreenDocument("offscreen.html")
+      await setupOffscreenDocument("src/offscreen.html")
 
       // コードをフォーマットしてセルに書き込む
       const code = await readCode(tabId)
@@ -63,7 +63,7 @@ async function formatCode(code: string) {
     chrome.notifications.create("", {
       title: "colab-formatter",
       message: "エラーによりフォーマット出来ませんでした",
-      iconUrl: chrome.runtime.getURL("icon48.png"),
+      iconUrl: chrome.runtime.getURL("assets/icon48.png"),
       type: "basic",
     });
   }

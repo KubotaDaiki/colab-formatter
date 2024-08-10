@@ -5,12 +5,12 @@ class Pyodide {
 
   async init() {
     const pyodide = await loadPyodide({
-      indexURL: "./pyodide",
+      indexURL: "/assets/pyodide",
     });
     await pyodide.loadPackage("micropip", { checkIntegrity: false });
     await pyodide.runPythonAsync(`
       import micropip
-      await micropip.install("./wheel/black-23.12.1-py3-none-any.whl")
+      await micropip.install("/assets/wheel/black-23.12.1-py3-none-any.whl")
       import black
     `);
     this.pyodide = pyodide;

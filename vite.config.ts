@@ -12,9 +12,9 @@ const manifest = defineManifest({
     "https://www.kaggle.com/*",
   ],
   icons: {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png",
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png",
   },
   background: {
     service_worker: "src/background.ts",
@@ -29,7 +29,11 @@ const manifest = defineManifest({
   },
   web_accessible_resources: [
     {
-      resources: ["*"],
+      resources: ["assets/*/*"],
+      matches: ["<all_urls>"],
+    },
+    {
+      resources: ["src/offscreen.html"],
       matches: ["<all_urls>"],
     },
   ],
@@ -43,12 +47,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        offscreen: "src/offscreen.ts"
+        offscreen: 'src/offscreen.html',
       },
-      output: {
-        entryFileNames: `assets/[name].js`, // offscreenのbuild時のファイル名を固定
-      },
-    }
+    },
   },
   plugins: [crx({ manifest })],
 });
